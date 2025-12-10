@@ -104,7 +104,6 @@ typedef struct {
  */
 typedef struct {
     go_path_point2d_t vertices[4];  /**< 4个顶点（顺/逆时针） */
-    bool enabled;                    /**< 是否启用 */
 } go_path_obstacle_t;
 
 /**
@@ -188,16 +187,6 @@ void go_path_set_obstacle_rect(uint8_t index,
 void go_path_set_obstacle_quad(uint8_t index,
                                float x1, float y1, float x2, float y2,
                                float x3, float y3, float x4, float y4);
-
-/**
- * @brief 启用/禁用障碍物
- */
-void go_path_enable_obstacle(uint8_t index, bool enable);
-
-/**
- * @brief 清除所有障碍物
- */
-void go_path_clear_obstacles(void);
 
 /**
  * @brief 检查点是否在障碍物内

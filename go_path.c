@@ -207,7 +207,6 @@ void go_path_set_obstacle_rect(uint8_t index,
     go_path_obstacles[index].vertices[2].y = y_max;
     go_path_obstacles[index].vertices[3].x = x_min;
     go_path_obstacles[index].vertices[3].y = y_max;
-    go_path_obstacles[index].enabled = true;
 }
 
 void go_path_set_obstacle_quad(uint8_t index,
@@ -223,21 +222,10 @@ void go_path_set_obstacle_quad(uint8_t index,
     go_path_obstacles[index].vertices[2].y = y3;
     go_path_obstacles[index].vertices[3].x = x4;
     go_path_obstacles[index].vertices[3].y = y4;
-    go_path_obstacles[index].enabled = true;
-}
-
-void go_path_enable_obstacle(uint8_t index, bool enable) {
-    if (index >= GO_PATH_OBSTACLE_NUM) return;
-    go_path_obstacles[index].enabled = enable;
-}
-
-void go_path_clear_obstacles(void) {
-    memset(go_path_obstacles, 0, sizeof(go_path_obstacles));
 }
 
 bool go_path_is_point_blocked(float x, float y) {
     for (int i = 0; i < GO_PATH_OBSTACLE_NUM; i++) {
-        if (!go_path_obstacles[i].enabled) continue;
         if (point_in_quad(x, y, &go_path_obstacles[i])) {
             return true;
         }
@@ -247,8 +235,6 @@ bool go_path_is_point_blocked(float x, float y) {
 
 bool go_path_is_line_blocked(float x1, float y1, float x2, float y2) {
     for (int i = 0; i < GO_PATH_OBSTACLE_NUM; i++) {
-        if (!go_path_obstacles[i].enabled) continue;
-
         /* 检查与四条边的相交 */
         for (int j = 0; j < 4; j++) {
             int k = (j + 1) % 4;
@@ -276,8 +262,6 @@ static int get_waypoint_candidates(go_path_point2d_t *candidates, int max_count)
     int count = 0;
 
     for (int i = 0; i < GO_PATH_OBSTACLE_NUM && count < max_count; i++) {
-        if (!go_path_obstacles[i].enabled) continue;
-
         /* 计算中心 */
         float cx = 0, cy = 0;
         for (int j = 0; j < 4; j++) {
@@ -399,8 +383,6 @@ void go_path_set_obstacle_rect(uint8_t index, float x_min, float y_min,
                                float x_max, float y_max) { (void)index; }
 void go_path_set_obstacle_quad(uint8_t index, float x1, float y1, float x2, float y2,
                                float x3, float y3, float x4, float y4) { (void)index; }
-void go_path_enable_obstacle(uint8_t index, bool enable) { (void)index; }
-void go_path_clear_obstacles(void) {}
 bool go_path_is_point_blocked(float x, float y) { return false; }
 bool go_path_is_line_blocked(float x1, float y1, float x2, float y2) { return false; }
 
